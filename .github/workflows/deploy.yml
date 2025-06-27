@@ -1,0 +1,43 @@
+name: Deploy Sandor TI site
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'src/**'
+      - '.github/workflows/deploy.yml'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 🔄 Clonar repositorio
+      uses: actions/checkout@v3
+
+    - name: 🛠️ Configurar .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: 🧱 Restaurar dependencias
+      run: dotnet restore ./src/SandorTI.csproj
+
+    - name: 🚀 Publicar Blazor WASM
+      run: dotnet publish ./src/SandorTI.csproj -c Release -o publish
+
+    - name: 📦 Copiar contenido a carpeta /docs
+      run: |
+        rm -rf docs
+        mkdir docs
+        cp -r publish/wwwroot/* docs/
+        touch docs/.nojekyll
+
+    - name: 📤 Commit y push de /docs
+      run: |
+        git config --global user.name 'SandorTI AutoDeploy'
+        git config --global user.email 'deploy@sandorti.local'
+        git add docs
+        git commit -m "⚡ Deploy automático desde main"
+        git push
+      continue-on-error: true
