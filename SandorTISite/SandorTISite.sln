@@ -3,9 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.12.35707.178 d17.12
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SandorTISite", "SandorTISite\SandorTISite\SandorTISite.csproj", "{9896C12C-A224-4359-B1E1-C40D2E52352D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SandorTISite.Client", "SandorTISite\SandorTISite.Client\SandorTISite.Client.csproj", "{C6CB81AA-2C32-4BA5-B27E-0379A70AC3EA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SandorTISite", "SandorTISite.csproj", "{A0CA2C21-09F9-4F0C-8A1C-F7711366CF6E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,14 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{9896C12C-A224-4359-B1E1-C40D2E52352D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9896C12C-A224-4359-B1E1-C40D2E52352D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9896C12C-A224-4359-B1E1-C40D2E52352D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9896C12C-A224-4359-B1E1-C40D2E52352D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C6CB81AA-2C32-4BA5-B27E-0379A70AC3EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C6CB81AA-2C32-4BA5-B27E-0379A70AC3EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C6CB81AA-2C32-4BA5-B27E-0379A70AC3EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C6CB81AA-2C32-4BA5-B27E-0379A70AC3EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0CA2C21-09F9-4F0C-8A1C-F7711366CF6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0CA2C21-09F9-4F0C-8A1C-F7711366CF6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0CA2C21-09F9-4F0C-8A1C-F7711366CF6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0CA2C21-09F9-4F0C-8A1C-F7711366CF6E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
