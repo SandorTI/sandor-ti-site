@@ -1,21 +1,26 @@
 ﻿@page "/"
+@using System.ComponentModel.DataAnnotations
+@using System.Text.Json
+@using System.Text
 
 <PageTitle>Sandor TI</PageTitle>
 
 <div class="container py-5">
     <div class="text-center mb-5">
-        <img src="logo.png" alt="Sandor TI Logo" class="img-fluid" style="max-height: 120px;" />
-        <h1 class="display-4 mt-3">Sandor TI</h1>
+        <img src="logo.png" alt="Sandor TI Logo" class="img-fluid" style="max-height: 240px;" />
         <p class="lead text-secondary">Donde nosotros empezamos termina el "no se puede"</p>
     </div>
 
     <section class="row align-items-center mb-5">
         <div class="col-md-6">
             <h2>¿Quiénes somos?</h2>
-            <p>Sandor TI es una casa de software con alma de solución. Nos especializamos en crear tecnología funcional, humana y adaptada a tu empresa, sin rodeos ni pretextos.</p>
+            <p>
+                Sandor TI es una casa de software con alma de solución.
+                Nos especializamos en crear tecnología funcional, humana y adaptada a tu empresa, sin rodeos ni pretextos.
+            </p>
         </div>
         <div class="col-md-6">
-            <img src="images/working-team.svg" alt="Equipo" class="img-fluid rounded shadow-sm" />
+            <img src="equipo.png" alt="Equipo" class="img-fluid rounded shadow-sm" />
         </div>
     </section>
 
@@ -49,9 +54,107 @@
         </div>
     </section>
 
-    <section class="text-center py-5 bg-light rounded shadow-sm">
-        <h2 class="mb-4">¿Tienes una idea o un problema que nadie ha resuelto?</h2>
-        <p class="mb-4">Escríbenos y hagamos realidad esa solución que tu negocio necesita.</p>
-        <a href="mailto:contacto@sandorti.com" class="btn btn-primary btn-lg">Contáctanos</a>
+    <section class="py-5">
+        <div class="container bg-light rounded shadow-sm p-4">
+            <h2 class="text-center mb-4">Contáctanos</h2>
+            @if (!formEnviado)
+            {
+                <EditForm Model="@formData" OnValidSubmit="EnviarFormulario">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+
+                    <div class="mb-3">
+                        <label class="form-label">Nombre completo</label>
+                        <InputText class="form-control" @bind-Value="formData.Nombre" />
+                        <ValidationMessage For="@(() => formData.Nombre)" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Número de contacto</label>
+                        <InputText class="form-control" @bind-Value="formData.Telefono" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Correo electrónico</label>
+                        <InputText type="email" class="form-control" @bind-Value="formData.Email" />
+                        <ValidationMessage For="@(() => formData.Email)" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">¿En qué podemos ayudarte?</label>
+                        <InputTextArea class="form-control" @bind-Value="formData.Mensaje" rows="4" />
+                        <ValidationMessage For="@(() => formData.Mensaje)" />
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Enviar mensaje</button>
+                </EditForm>
+            }
+            else
+            {
+                <div class="alert alert-success text-center">
+                    ¡Gracias por contactarnos! Te responderemos lo antes posible.
+                </div>
+            }
+        </div>
     </section>
 </div>
+
+@code {
+    private ContactoModel formData = new();
+    private bool formEnviado = false;
+
+    private async Task EnviarFormulario()
+    {
+        // Aquí puedes agregar lógica para enviar por API, email, etc.
+        formEnviado = await EnviarFormularioApi();
+    }
+
+    private async Task<bool> EnviarFormularioApi()
+    {
+        var http = new HttpClient();
+        var contacto = new
+        {
+            Email = formData.Email,
+            Subject = $"Contacto desde Sandor TI - {formData.Nombre}",
+            Message = $"Nombre: {formData.Nombre}, E-Mail: {formData.Email} Telefono: {formData.Telefono} Mensaje: {formData.Mensaje}"
+        };
+
+        var json = JsonSerializer.Serialize(contacto);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+        http.BaseAddress = new Uri( "https://apisgenerales.azurewebsites.net/");
+        try{
+            var response = await http.PostAsync("api/Contact", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            else
+            {
+                // Manejo de error
+                return false;
+            }
+        }
+        catch(Exception ex){
+            Console.WriteLine($"Error al enviar el formulario: {ex.Message}");
+            return false;
+        }
+        
+    }
+    public class ContactoModel
+    {
+        [Required(ErrorMessage = "El nombre es obligatorio")]
+        public string Nombre { get; set; } = "";
+
+        public string Telefono { get; set; } = "";
+
+        [Required(ErrorMessage = "El correo es obligatorio")]
+        [EmailAddress(ErrorMessage = "Correo no válido")]
+        public string Email { get; set; } = "";
+
+        [Required(ErrorMessage = "Por favor describe tu necesidad")]
+        public string Mensaje { get; set; } = "";
+
+    }
+
+}
